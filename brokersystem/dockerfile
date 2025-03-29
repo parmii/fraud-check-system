@@ -1,0 +1,21 @@
+# Use OpenJDK as base image
+FROM openjdk:17-jdk-slim
+
+# Set working directory
+WORKDIR /app
+ENV MAVEN_OPTS="-Dmaven.repo.local=/app/.m2/repository"
+
+# Copy Maven wrapper and pom.xml to resolve dependencies
+COPY mvnw pom.xml ./
+COPY .mvn .mvn
+RUN ./mvnw dependency:resolve
+
+# Copy source code and build the application
+COPY src ./src
+RUN ./mvnw clean package -DskipTests
+
+# Expose the application port
+EXPOSE 8081
+
+# Run the application
+CMD ["java", "-jar", "target/brokersystem-0.0.1-SNAPSHOT.jar"]

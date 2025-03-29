@@ -1,0 +1,26 @@
+# Use Maven official image for building dependencies
+FROM maven:3.8.6-eclipse-temurin-17 AS builder
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Copy the common module source code into the container
+COPY . .
+
+# Build the common module and store dependencies in a shared volume
+RUN mvn clean install -DskipTests
+
+# Use a lightweight JDK image to store the built artifacts
+FROM eclipse-temurin:17-jdk
+
+# Set working directory for the final container
+WORKDIR /app
+
+# Copy the built JAR from the builder stage
+COPY --from=builder /root/.m2 /root/.m2
+
+# Set the Maven repository path
+ENV MAVEN_REPO_PATH=/root/.m2
+
+# Default command (this container mainly serves as a dependency provider)
+CMD ["tail", "-f", "/dev/null"]

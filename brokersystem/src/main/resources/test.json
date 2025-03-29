@@ -1,0 +1,16 @@
+{
+  "transactionId": "550e8400-e29b-41d4-a716-446655440000",
+  "payerName": "John Doe",
+  "payerBank": "Bank of America",
+  "payerCountryCode": "USA",
+  "payerAccount": "123456",
+  "payeeName": "Jane Smith",
+  "payeeBank": "BNP Paribas",
+  "payeeCountryCode": "GBR",
+  "payeeAccount": "789012",
+  "paymentInstruction": "Loan Repayment",
+  "executionDate": "2025-03-26",
+  "amount": 1000.00,
+  "currency": "USD",
+  "creationTimestamp": "2025-03-26T12:00:00Z"
+}

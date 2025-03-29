@@ -1,0 +1,35 @@
+package com.example.paymentsystem.constant;
+
+public enum Event {
+    FRAUD_CHECK_REQUEST_RECEIVED_BY_BS("FRAUD_CHECK_REQUEST_RECEIVED_BY_BS"),
+    FRAUD_CHECK_RESPONSE_RECEIVED_BY_BS("FRAUD_CHECK_RESPONSE_RECEIVED_BY_BS"),
+    FRAUD_CHECK_RESPONSE_RECEIVED_BY_PPS("FRAUD_CHECK_RESPONSE_RECEIVED_BY_PPS"),
+    FRAUD_CHECK_REQUEST_RECEIVED_BY_FCS("FRAUD_CHECK_REQUEST_RECEIVED_BY_FCS"),
+    FRAUD_CHECK_REQUEST_SENT_TO_BS("FRAUD_CHECK_REQUEST_SENT_TO_BS"),
+    FRAUD_CHECK_REQUEST_SENT_TO_FCS("FRAUD_CHECK_REQUEST_SENT_TO_FCS"),
+    FRAUD_CHECK_RESPONSE_SENT_TO_BS("FRAUD_CHECK_RESPONSE_SENT_TO_BS"),
+    FRAUD_CHECK_RESPONSE_SENT_TO_PPS("FRAUD_CHECK_RESPONSE_SENT_TO_PPS"),
+    FRAUD_CHECK_RESPONSE_SENT_BY_FCS("FRAUD_CHECK_RESPONSE_SENT_BY_FCS"),
+    FRAUD_CHECK_RESPONSE_SENT_BY_BS("FRAUD_CHECK_RESPONSE_SENT_BY_BS"),
+    FRAUD_CHECK_FAILED("FRAUD_CHECK_FAILED"),
+    FRAUD_CHECK_PASSED("FRAUD_CHECK_PASSED"),
+    REQUEST_FAILURE("REQUEST_FAILURE"),
+    RESPONSE_FAILURE("RESPONSE_FAILURE");
+
+    private final String eventType;
+
+    Event(String eventType) {
+        this.eventType = eventType;
+    }
+
+    // Getter method to retrieve the string value
+    public String getEventType() {
+        return eventType;
+    }
+
+    // Optional: Override the toString method to return the status
+    @Override
+    public String toString() {
+        return eventType;
+    }
+}
