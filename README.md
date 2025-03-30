@@ -137,6 +137,11 @@ The following interaction diagram outlines how the three components interact:
  +---------------------+            +---------------------+            +---------------------+
 ```
 ## UML Design
+### Component Design
+```markdown
+![fraudcheckcomponents.jpg](fraudcheckcomponents.jpg)
+```
+
 ```markdown
 ![components-coomunication.png](components-coomunication.png)
 ```
@@ -164,48 +169,6 @@ PPS -> User: Return Final Payment Decision (Approved/Rejected)
 @enduml
 
 ```
-
-```uml
-@startuml
-title Payment Processing System - Component Diagram
-
-package "Payment Processing System (PPS)" {
-    [Payment API] --> [Payment Validator]
-    [Payment Validator] --> [Broker Service]
-    [Broker Service] --> [Payment Service]
-    [Broker Service] --> [Message Queue]
-    [Broker Service] --> [REST API]
-   
-    [REST API] --> [BS REST]
-    [Message Queue] --> [BS Route]
-    
-    [PPS Route] --> [Payment Service]
-    [Payment Service] --> [Payment Processor]
-}
-
-package "Broker System (BS)" {
-    [BS REST] --> [Fraud Request Converter]
-    [BS Route] --> [Fraud Request Converter]
-    [Fraud Request Converter] --> [FCS Route]
-    [BS Route] --> [Response Converter]
-    [Response Converter] --> [PPS Route]
-   
-}
-
-package "Fraud Check System (FCS)" {
-    [FCS Route] --> [Blacklist Validator]
-    [Blacklist Validator] --> [Fraud Response Generator]
-    [Fraud Response Generator] --> [FCS Route]
-    [FCS Route] --> [BS Route]
-}
-
-
-@enduml
-
-
-```
-
-
 ---
 
 ## Project Structure
