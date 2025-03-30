@@ -6,6 +6,7 @@ import com.example.paymentsystem.dto.FraudCheckRequest;
 import com.example.paymentsystem.dto.FraudCheckResponse;
 import com.example.paymentsystem.dto.FraudCheckRequest;
 import com.example.paymentsystem.service.AuditLogService;
+import com.example.paymentsystem.utils.PayloadConverter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -33,12 +34,12 @@ public class FraudCheckRoute extends RouteBuilder {
             .process(exchange -> {
                 String xmlBody = exchange.getIn().getBody(String.class);
                 // Convert XML to Object
-                XmlMapper xmlMapper = new XmlMapper();
-                FraudCheckRequest payment = xmlMapper.readValue(xmlBody, FraudCheckRequest.class);
+                FraudCheckRequest payment =PayloadConverter.jsonToObject(PayloadConverter.xmlToJson(xmlBody, FraudCheckRequest.class), FraudCheckRequest.class);
+
                 auditLogService.logEvent(payment.getTransactionId(), Event.FRAUD_CHECK_REQUEST_RECEIVED_BY_FCS.getEventType(), Event.FRAUD_CHECK_REQUEST_RECEIVED_BY_FCS.getEventType(), "fraud-check-request");
 
                 FraudCheckResponse response = fraudCheckService.checkFraud(payment);
-                exchange.getIn().setBody(xmlMapper.writeValueAsString(response));
+                exchange.getIn().setBody(PayloadConverter.toXml(PayloadConverter.objectToJson(response)));
 
                 auditLogService.logEvent(payment.getTransactionId(), Event.FRAUD_CHECK_REQUEST_SENT_TO_BS.getEventType(), Event.FRAUD_CHECK_REQUEST_SENT_TO_BS.getEventType(), "fraud-check-result");
             })
@@ -48,7 +49,10 @@ public class FraudCheckRoute extends RouteBuilder {
                 .log("Stack Trace: ${exception.stacktrace}") // Prints stack trace
                 .process(exchange -> {
                     Exception exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
-                    FraudCheckRequest payment = exchange.getIn().getBody(FraudCheckRequest.class);
+                    String xmlBody = exchange.getIn().getBody(String.class);
+                    // Convert XML to Object
+                    FraudCheckRequest payment =PayloadConverter.jsonToObject(PayloadConverter.xmlToJson(xmlBody, FraudCheckRequest.class), FraudCheckRequest.class);
+
                     auditLogService.logEvent(payment.getTransactionId(), Event.REQUEST_FAILURE.getEventType(), exception.getMessage(), "");
                 })
                 .log("Error during fraud check")

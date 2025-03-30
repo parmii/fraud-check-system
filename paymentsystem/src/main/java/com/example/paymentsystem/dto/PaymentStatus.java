@@ -3,9 +3,9 @@ package com.example.paymentsystem.dto;
 public enum PaymentStatus {
     INITIATED("INITIATED"),
     FAILED("FAILED"),
-    SUCCESS("SUCCESS"),
+    APPROVED("APPROVED"),
     FRAUD_CHECK_INITAITED("FRAUD_CHECK_INITAITED"),
-    FRAUD_CHECK_FAILED("FRAUD_CHECK_FAILED"),
+    REJECTED("REJECTED"),
     FRAUD_CHECK_SUCCESS("FRAUD_CHECK_SUCCESS");
 
     private String status;

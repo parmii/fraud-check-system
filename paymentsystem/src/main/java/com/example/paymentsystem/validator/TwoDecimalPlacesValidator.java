@@ -6,17 +6,16 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
-public class TwoDecimalPlacesValidator implements ConstraintValidator<TwoDecimalPlaces, BigDecimal> {
-
-    private static final Pattern DECIMAL_PATTERN = Pattern.compile("\\d+\\.\\d{2}");
+public class TwoDecimalPlacesValidator implements ConstraintValidator<TwoDecimalPlaces, Double> {
+    private static final Pattern DECIMAL_PATTERN = Pattern.compile("^[0-9]+(\\.[0-9]{2})?$");
 
     @Override
-    public boolean isValid(BigDecimal value, ConstraintValidatorContext context) {
+    public boolean isValid(Double value, ConstraintValidatorContext context) {
         if (value == null) {
-            return true; // Let @NotNull handle null validation if required
+            return true;  // If it's nullable, consider it valid
         }
 
-        // Convert BigDecimal to String and check if it matches the pattern
-        return DECIMAL_PATTERN.matcher(value.toPlainString()).matches();
+        // Ensure that we don't have more than 2 decimal places
+        return DECIMAL_PATTERN.matcher(value.toString()).matches();
     }
 }

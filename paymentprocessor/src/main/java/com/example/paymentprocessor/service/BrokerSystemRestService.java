@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +25,14 @@ public class BrokerSystemRestService extends AbstractBrokerService {
     @Autowired
     private AuditLogService auditLogService;
 
+    @Value("${app.broker.endpoint}")
+    private String brokerEndpoint;
+
     @Override
     public void callFraudCheckForPayment(FraudCheckRequest  fraudCheckRequest) {
         try {
             RestClientUtility restClientUtility = new RestClientUtility();
-            restClientUtility.postRequest("http://localhost:8083/api/fraud-check/request", fraudCheckRequest, PaymentResponse.class, "BROKER_SERVICE");
+            restClientUtility.postRequest(brokerEndpoint, fraudCheckRequest, PaymentResponse.class, "BROKER_SERVICE");
             auditLogService.logEvent(fraudCheckRequest.getTransactionId(), Event.FRAUD_CHECK_RESPONSE_SENT_TO_BS.getEventType(), Event.FRAUD_CHECK_RESPONSE_SENT_TO_BS.getEventType(), "");
         } catch (Exception e) {
             e.printStackTrace();

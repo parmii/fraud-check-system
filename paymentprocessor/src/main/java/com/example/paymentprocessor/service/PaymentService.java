@@ -7,6 +7,7 @@ import com.example.paymentsystem.dto.PaymentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -16,15 +17,19 @@ public class PaymentService {
     private PaymentTransactionRepository repository;
 
     public PaymentTransaction getPaymentTransaction(UUID uuid) {
-        return repository.getById(uuid);
+        Optional<PaymentTransaction> result = repository.findById(uuid);
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            return null;
+        }
     }
 
     public PaymentTransaction savePayment(PaymentTransaction transaction) {
-        transaction.setTransactionId(UUID.randomUUID());
         return repository.save(transaction);
     }
 
-    public void updatePaymentStatus(UUID transactionId, PaymentStatus status) {
+    public void updatePaymentStatus(UUID transactionId, String status) {
         repository.findById(transactionId).ifPresent(tx -> {
             tx.setStatus(status);
             repository.save(tx);

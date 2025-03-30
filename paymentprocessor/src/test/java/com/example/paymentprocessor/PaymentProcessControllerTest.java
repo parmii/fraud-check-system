@@ -1,6 +1,7 @@
 package com.example.paymentprocessor;
 
 import com.example.paymentprocessor.controller.PaymentProcessController;
+import com.example.paymentprocessor.repository.PaymentTransactionRepository;
 import com.example.paymentprocessor.repository.TransactionRepository;
 import com.example.paymentprocessor.service.BrokerService;
 import com.example.paymentsystem.dto.Payment;
@@ -42,7 +43,10 @@ class PaymentProcessControllerTest {
     @Mock
     private BrokerService brokerServiceMessanger;
 
-    @MockBean  // Mock TransactionRepository
+    @MockBean
+    private PaymentTransactionRepository repository;
+
+    @MockBean
     private TransactionRepository transactionRepository;
 
     @InjectMocks
@@ -69,10 +73,9 @@ class PaymentProcessControllerTest {
         payment.setPayeeAccount("789012");
         payment.setPaymentInstruction("Loan Repayment");
         payment.setExecutionDate(new Date(calendar.getTimeInMillis()));
-        payment.setAmount(1000);
+        payment.setAmount(1000.99);
         payment.setCurrency("USD");
         payment.setCreatedTimetamp(new Timestamp(calendar.getTimeInMillis()));
-        payment.setTransactionId(java.util.UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
         // Convert Payment object to JSON
         ObjectMapper objectMapper = new ObjectMapper();
         String paymentJson = objectMapper.writeValueAsString(payment);

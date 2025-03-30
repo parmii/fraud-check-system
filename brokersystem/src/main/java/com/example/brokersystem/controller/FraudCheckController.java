@@ -5,12 +5,14 @@ import com.example.paymentsystem.constant.Event;
 import com.example.paymentsystem.dto.FraudCheckRequest;
 import com.example.paymentsystem.dto.PaymentResponse;
 import com.example.paymentsystem.service.AuditLogService;
+import com.example.paymentsystem.utils.PayloadConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import jakarta.annotation.PostConstruct;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +27,7 @@ public class FraudCheckController {
     private final ObjectMapper objectMapper;
 
 
-    public FraudCheckController( ObjectMapper objectMapper) {
+    public FraudCheckController(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -34,6 +36,9 @@ public class FraudCheckController {
 
     @Autowired
     private AuditLogService auditLogService;
+
+    @Value("${app.fcs.requestroute}")
+    private String fcsRequestRoute;
 
     @PostConstruct
     public void init() {
@@ -50,9 +55,7 @@ public class FraudCheckController {
         try {
             auditLogService.logEvent(fraudCheckRequest.getTransactionId(), Event.FRAUD_CHECK_REQUEST_RECEIVED_BY_BS.getEventType(), Event.FRAUD_CHECK_REQUEST_RECEIVED_BY_BS.getEventType(), "");
 
-            XmlMapper xmlMapper = new XmlMapper();
-            String xmlRequest = xmlMapper.writeValueAsString(fraudCheckRequest);
-            producerTemplate.sendBody("kafka:fraud-check-request?brokers=localhost:9092", xmlRequest);
+            producerTemplate.sendBody(fcsRequestRoute, PayloadConverter.toXml(fraudCheckRequest));
 
             auditLogService.logEvent(fraudCheckRequest.getTransactionId(), Event.FRAUD_CHECK_REQUEST_SENT_TO_FCS.getEventType(), Event.FRAUD_CHECK_REQUEST_SENT_TO_FCS.getEventType(), "fraud-check-request");
 

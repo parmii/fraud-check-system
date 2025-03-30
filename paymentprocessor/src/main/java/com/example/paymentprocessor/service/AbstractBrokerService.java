@@ -1,7 +1,6 @@
 package com.example.paymentprocessor.service;
 
 import com.example.paymentprocessor.repository.PaymentTransaction;
-import com.example.paymentprocessor.repository.Transaction;
 import com.example.paymentsystem.dto.FraudCheckRequest;
 import com.example.paymentsystem.dto.Payment;
 import com.example.paymentsystem.dto.PaymentResponse;
@@ -37,7 +36,7 @@ public abstract class AbstractBrokerService implements BrokerService {
             } else {
                 FraudCheckRequest fraudCheckRequest = new FraudCheckRequest();
 
-                paymentTransaction.setStatus(PaymentStatus.FRAUD_CHECK_INITAITED);
+                paymentTransaction.setStatus(PaymentStatus.FRAUD_CHECK_INITAITED.getStatus());
                 paymentService.savePayment(paymentTransaction);
 
                 BeanUtils.copyProperties(paymentTransaction, fraudCheckRequest);
@@ -76,12 +75,16 @@ public abstract class AbstractBrokerService implements BrokerService {
         }
         if (paymentTransaction.getStatus() != null) {
             if (PaymentStatus.FAILED.equals(paymentTransaction.getStatus())
-                            || PaymentStatus.FRAUD_CHECK_FAILED.equals(paymentTransaction.getStatus())) {
+                            || PaymentStatus.REJECTED.equals(paymentTransaction.getStatus())) {
                 message.append("Payment Transaction is failed already.");
             }
-            if (PaymentStatus.FRAUD_CHECK_INITAITED.equals(paymentTransaction.getStatus())) {
+            if (PaymentStatus.FRAUD_CHECK_INITAITED.getStatus().equals(paymentTransaction.getStatus())) {
                 message.append("Payment Transaction is already in process of FRAUD CHECK.");
-            }// if(transaction.getStatus().name().equalsIgnoreCase(PaymentStatus.FAILED.name()) || )
+            }
+
+            if (PaymentStatus.APPROVED.getStatus().equals(paymentTransaction.getStatus())) {
+                message.append("Payment Transaction is already approved.");
+            }
         }
 
         return message.toString();

@@ -12,6 +12,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -20,6 +21,12 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(properties = {
+        "app.fcs.requestroute=kafka:fraud-check-request?brokers=localhost:9092",
+        "app.fcs.responseroute=kafka:fraud-check-result?brokers=localhost:9092&groupId=fraud-check-consumer&autoOffsetReset=earliest",
+        "app.pps.requestroute=kafka:pps-fraud-check-request?brokers=localhost:9092&groupId=fraud-check-consumer&autoOffsetReset=earliest",
+        "app.pps.responseroute=kafka:pps-fraud-check-response?brokers=localhost:9092"
+})
 public class FraudCheckControllerTest {
 
     @Autowired
