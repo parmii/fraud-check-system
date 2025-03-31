@@ -33,8 +33,8 @@ INSERT INTO payment_transactions (payer_name, payer_bank, payer_country, payer_a
 VALUES
 ('John Doe', 'Bank A', 'USA', '123456789',
  'Alice Smith', 'Bank B', 'UK', '987654321',
- 'Payment for services', 'USD', 500.00, '2024-03-29', 'Approved'),
+ 'Payment for services', 'USD', 500.00, '2024-03-29', ''),
 
 ('Michael Brown', 'Bank C', 'Canada', '555444333',
  'David Johnson', 'Bank D', 'Germany', '999888777',
- 'Invoice Payment', 'EUR', 1200.50, '2024-03-30', 'Rejected');
+ 'Invoice Payment', 'EUR', 1200.50, '2024-03-30', '');
