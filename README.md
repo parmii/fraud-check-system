@@ -228,6 +228,30 @@ Run below command and start the services in corrosponding folders
 
 ### Endpoint to hit Payment Processing API
 ```bash
+Solution1: sends to BS via REST
+
+curl --location 'http://localhost:8080/api/processpayment' \
+--header 'Content-Type: application/json' \
+--data '{
+  "transactionId": "7ad56d9f-1710-48e0-ae05-3c65278f0970",
+  "payerName": "John Doe",
+  "payerBank": "Bank of America",
+  "payerCountry": "USA",
+  "payerAccount": "123456",
+  "payeeName": "Jane Smith",
+  "payeeBank": "BNP Paribas",
+  "payeeCountry": "GBR",
+  "payeeAccount": "789012",
+  "paymentInstruction": "Loan Repayment",
+  "executionDate": "2025-03-26",
+  "amount": 1000.09,
+  "currency": "USD",
+  "createdTimetamp": "2025-03-26T12:00:00Z"
+}
+'
+
+
+Solution 2: sends to BS via KAFKA(Camel Route)
 curl --location 'http://localhost:8080/api/processpayment/message' \
 --header 'Content-Type: application/json' \
 --data '{
