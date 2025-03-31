@@ -32,7 +32,7 @@ This project includes three main components—**PPS (Payment Processing System)*
 - This system doesn't validate Payer's or Payee's bank account information
 - Transaction already exist which has to be validated
 - It only updates payment on intermediate level assuming rest of the systems are in place
-- **Broker System** only acts as a meidator between **PPS** and **FCS*8
+- **Broker System** only acts as a mediator between **PPS** and **FCS**
 - **FCS** performs only black list validation
 
 #### Components of PPS:
@@ -140,10 +140,12 @@ The following interaction diagram outlines how the three components interact:
 ### Component Design
 ```markdown
 ![fraudcheckcomponents.jpg](fraudcheckcomponents.jpg)
+Refer fraudcheckcomponents.jpg) in root folder
 ```
 
 ```markdown
-![components-coomunication.png](components-coomunication.png)
+![components-coomunication.png](components-communication.png)
+Refer components-communication.png in root folder
 ```
 
 ```uml
@@ -206,5 +208,23 @@ Run the following command to start all services:
 - Postgres(Port: 5432)
 - Kafka (Port: 9092)
 - Zookeeper (Port: 2181)
+
+### Building and starting PPS, BS and FCS service
+Run below command and start the services in corrosponding folders
+```bash
+       cd paymentprocessor
+       mvn clean install //for all services
+       java -jar target/paymentprocessor-0.0.1-SNAPSHOT.jar
+       
+       cd ../brokersystem
+       mvn clean install
+       java -jar target/brokersystem-0.0.1-SNAPSHOT.jar
+       
+       cd ../fraudchecksystem
+       mvn clean install
+       java -jar target/fraudchecksystem-0.0.1-SNAPSHOT.jar
+       
+   ```  
+
 
 
