@@ -224,7 +224,32 @@ Run below command and start the services in corrosponding folders
        mvn clean install
        java -jar target/fraudchecksystem-0.0.1-SNAPSHOT.jar
        
-   ```  
+   ```
+
+### Endpoint to hit Payment Processing API
+```bash
+curl --location 'http://localhost:8080/api/processpayment/message' \
+--header 'Content-Type: application/json' \
+--data '{
+  "transactionId": "7ad56d9f-1710-48e0-ae05-3c65278f0970",
+  "payerName": "John Doe",
+  "payerBank": "Bank of America",
+  "payerCountry": "USA",
+  "payerAccount": "123456",
+  "payeeName": "Jane Smith",
+  "payeeBank": "BNP Paribas",
+  "payeeCountry": "GBR",
+  "payeeAccount": "789012",
+  "paymentInstruction": "Loan Repayment",
+  "executionDate": "2025-03-26",
+  "amount": 1000.09,
+  "currency": "USD",
+  "createdTimetamp": "2025-03-26T12:00:00Z"
+}
+'
+
+```
+
 
 
 
